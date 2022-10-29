@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 
-#define SCREEN_WIDTH 915
-#define SCREEN_HIGHT 915
+#define SCREEN_WIDTH 920
+#define SCREEN_HIGHT 920
 #define PADDING 50
 
 /* color palettes */
@@ -43,7 +43,32 @@ void sdl_set_color_hex(SDL_Renderer* renderer, Uint32 color_hex){
                              (color_hex >> (0*8)) & 0xFF));
 }
 
+void highlight_file(SDL_Renderer* renderer, Uint32 file){
+  for(int i=0; i<8; i++){
+    SDL_Rect mrect;
+    mrect.x=PADDING+100*file;
+    mrect.y=PADDING+100*i;
+    mrect.w=100;
+    mrect.h=100;
+    sdl_set_color_hex(renderer, RED);
+    SDL_RenderFillRect(renderer, &mrect);
+  }
+}
+
+void highlight_col(SDL_Renderer* renderer, Uint32 col){
+  for(int i=0; i<8; i++){
+    SDL_Rect mrect;
+    mrect.x=PADDING+100*i;
+    mrect.y=PADDING+100*(7-col);
+    mrect.w=100;
+    mrect.h=100;
+    sdl_set_color_hex(renderer, RED);
+    SDL_RenderFillRect(renderer, &mrect);
+  }
+}
+
 void highlight_sq(SDL_Renderer* renderer, int mouse_x, int mouse_y){
+  if (mouse_x>PADDING+800 || mouse_y>PADDING+800 || mouse_x<PADDING || mouse_y<PADDING) return;
   int i=(mouse_x-PADDING)/100;
   int j=(mouse_y-PADDING)/100;
   SDL_Rect mrect;
@@ -90,6 +115,8 @@ int main(int argc, char* argv[]){
   int mouse_x;
   int mouse_y;
   int mouse_pressed=0;
+  int file=8;
+  int col=8;
 
 	int quit=0;
 	while(!quit){
@@ -101,6 +128,78 @@ int main(int argc, char* argv[]){
         mouse_pressed=1;
         /* printf("mouse coord: %i,%i\n", mouse_x, mouse_y); */
       } break;
+      case SDL_KEYDOWN:{
+        switch(event.key.keysym.sym){
+        case SDLK_a:
+          file=0;
+          col=8;
+          break;
+        case SDLK_b:
+          file=1;
+          col=8;
+          break;
+        case SDLK_c:
+          file=2;
+          col=8;
+          break;
+        case SDLK_d:
+          file=3;
+          col=8;
+          break;
+        case SDLK_e:
+          file=4;
+          col=8;
+          break;
+        case SDLK_f:
+          file=5;
+          col=8;
+          break;
+        case SDLK_g:
+          file=6;
+          col=8;
+          break;
+        case SDLK_h:
+          file=7;
+          col=8;
+          break;
+        case SDLK_1:
+          col=0;
+          file=8;
+          break;
+        case SDLK_2:
+          col=1;
+          file=8;
+          break;
+        case SDLK_3:
+          col=2;
+          file=8;
+          break;
+        case SDLK_4:
+          col=3;
+          file=8;
+          break;
+        case SDLK_5:
+          col=4;
+          file=8;
+          break;
+        case SDLK_6:
+          col=5;
+          file=8;
+          break;
+        case SDLK_7:
+          col=6;
+          file=8;
+          break;
+        case SDLK_8:
+          col=7;
+          file=8;
+          break;
+        case SDLK_i:
+          file=8;
+          col=8;
+          break;
+        }
+      } break;
 			case SDL_QUIT:{
 		     		quit=1;
 			} break;
@@ -109,6 +208,8 @@ int main(int argc, char* argv[]){
     scc(SDL_SetRenderDrawColor(renderer, 18, 18, 18, 255));
     scc(SDL_RenderClear(renderer));
     draw_grid(renderer, 8, mouse_x, mouse_y, mouse_pressed);
+    if(file<8) highlight_file(renderer, file);
+    if(col<8) highlight_col(renderer, col);
 		SDL_RenderPresent(renderer);
 	}
 
