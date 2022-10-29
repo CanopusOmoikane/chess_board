@@ -1,0 +1,7 @@
+- [X] draw a window
+- [X] draw lines
+- [X] draw a rectangle on the screen
+- [X] draw board
+- [X] colors from hex
+- [X] mouse clicks
+- [ ] animate the rectangle
